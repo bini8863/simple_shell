@@ -22,7 +22,7 @@ int main(int argc, char *argv[])
 		perror("fork");
 		exit(EXIT_FAILURE);
 	}
-	if (child_pid == 0)
+	else if (child_pid == 0)
 	{
 		printf("child pid is %ld", (long) getpid());
 		if (argc == 1)
@@ -32,9 +32,8 @@ int main(int argc, char *argv[])
 		_exit(atoi(argv[1]));
 	}
 	else
-	{ 
-		do
-		{
+	{
+		do {
 			my_wait = waitpid(child_pid, &wstatus, WCONTINUED | WUNTRACED);
 
 			if (my_wait == -1)
@@ -42,7 +41,6 @@ int main(int argc, char *argv[])
 				perror("waitpid");
 				exit(EXIT_FAILURE);
 			}
-			
 			if (WIFEXITED(wstatus))
 			{
 				printf("terminated normally, status is %d\n", WEXITSTATUS(wstatus));
@@ -59,11 +57,9 @@ int main(int argc, char *argv[])
 			{
 				printf("resumed \n");
 			}
-		} 
-		while (!WIFEXITED(wstatus) && (!WIFSIGNALED(wstatus)));
-				
-				exit(EXIT_SUCCESS);
-				
+		}
+			while (!WIFEXITED(wstatus) && (!WIFSIGNALED(wstatus)));
+		exit(EXIT_SUCCESS);
 	}
 }
 
